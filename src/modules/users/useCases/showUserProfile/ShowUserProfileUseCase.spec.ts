@@ -1,4 +1,5 @@
 import { InMemoryUsersRepository } from "../../repositories/in-memory/InMemoryUsersRepository";
+import { ShowUserProfileError } from "./ShowUserProfileError";
 import { ShowUserProfileUseCase } from "./ShowUserProfileUseCase";
 
 let inMemoryUsersRepository: InMemoryUsersRepository;
@@ -20,4 +21,12 @@ describe("Show User Profile - Use Case", () => {
 
     expect(user).toHaveProperty("id");
   })
+
+  it("should not be able to show user profile when user non exists", async () => {
+    await expect(
+      showUserProfileUseCase.execute(
+        "non-exists"
+      )
+    ).rejects.toBeInstanceOf(ShowUserProfileError);
+  });
 })
