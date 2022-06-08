@@ -37,4 +37,21 @@ describe("Authenticate User - Use Case", () => {
       })
     ).rejects.toBeInstanceOf(IncorrectEmailOrPasswordError)
   });
+
+  it("should not be able to authenticate user when incorrect password", async () => {
+    const hashPassword = await hash("teste123", 8);
+
+    await inMemoryUsersRepository.create({
+      email: "teste@teste.com.br",
+      name: "teste",
+      password: hashPassword
+    });
+
+    await expect(
+      authenticateUserUseCase.execute({
+        email: "teste@teste.com.br",
+        password: "teste"
+      })
+    ).rejects.toBeInstanceOf(IncorrectEmailOrPasswordError);
+  });
 });
