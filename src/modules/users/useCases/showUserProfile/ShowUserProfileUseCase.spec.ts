@@ -8,4 +8,16 @@ describe("Show User Profile - Use Case", () => {
     inMemoryUsersRepository = new InMemoryUsersRepository();
     showUserProfileUseCase = new ShowUserProfileUseCase(inMemoryUsersRepository);
   })
+
+  it("should be able to show user profile", async () => {
+    const { id } = await inMemoryUsersRepository.create({
+      name: "user",
+      email: "user@teste.com.br",
+      password: "123"
+    });
+
+    const user = await showUserProfileUseCase.execute(id!);
+
+    expect(user).toHaveProperty("id");
+  })
 })
