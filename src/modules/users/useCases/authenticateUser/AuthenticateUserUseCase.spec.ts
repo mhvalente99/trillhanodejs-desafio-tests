@@ -1,6 +1,7 @@
 import { hash } from "bcryptjs";
 import { InMemoryUsersRepository } from "../../repositories/in-memory/InMemoryUsersRepository";
 import { AuthenticateUserUseCase } from "./AuthenticateUserUseCase";
+import { IncorrectEmailOrPasswordError } from "./IncorrectEmailOrPasswordError";
 
 let inMemoryUsersRepository: InMemoryUsersRepository;
 let authenticateUserUseCase: AuthenticateUserUseCase;
@@ -26,5 +27,14 @@ describe("Authenticate User - Use Case", () => {
     });
 
     expect(authenticatedUser).toHaveProperty("token");
+  });
+
+  it("should not be able to authenticate user when user non exists", async () => {
+    await expect(
+      authenticateUserUseCase.execute({
+        email: "nonexiste@user.com.br",
+        password: "teste123"
+      })
+    ).rejects.toBeInstanceOf(IncorrectEmailOrPasswordError)
   });
 });
