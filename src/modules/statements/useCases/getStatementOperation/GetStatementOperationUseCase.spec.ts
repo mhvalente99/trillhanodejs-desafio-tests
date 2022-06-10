@@ -47,4 +47,19 @@ describe("Get Statement Operation - Use Case", () => {
       })
     ).rejects.toBeInstanceOf(GetStatementOperationError.UserNotFound);
   });
+
+  it("should not be able to return statement operation when statement non exists", async () => {
+    const user = await inMemoryUsersRepository.create({
+      email: "statement@test.com.br",
+      name: "Statement Operation",
+      password: "123"
+    });
+
+    await expect(
+      getStatementOperationUseCase.execute({
+        statement_id: "statement_id",
+        user_id: user.id!
+      })
+    ).rejects.toBeInstanceOf(GetStatementOperationError.StatementNotFound);
+  });
 });
