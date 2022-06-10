@@ -1,6 +1,7 @@
 import { InMemoryUsersRepository } from "../../../users/repositories/in-memory/InMemoryUsersRepository";
 import { OperationType } from "../../entities/Statement";
 import { InMemoryStatementsRepository } from "../../repositories/in-memory/InMemoryStatementsRepository";
+import { GetStatementOperationError } from "./GetStatementOperationError";
 import { GetStatementOperationUseCase } from "./GetStatementOperationUseCase";
 
 let getStatementOperationUseCase: GetStatementOperationUseCase;
@@ -36,5 +37,14 @@ describe("Get Statement Operation - Use Case", () => {
     });
 
     expect(statementOperation).toHaveProperty("id");
+  });
+
+  it("should not be able to return statement operation when user non exists", async () => {
+    await expect(
+      getStatementOperationUseCase.execute({
+        statement_id: "statement_id",
+        user_id: "user_id"
+      })
+    ).rejects.toBeInstanceOf(GetStatementOperationError.UserNotFound);
   });
 });
