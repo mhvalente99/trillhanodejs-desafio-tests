@@ -1,6 +1,7 @@
 import { InMemoryUsersRepository } from "../../../users/repositories/in-memory/InMemoryUsersRepository";
 import { OperationType } from "../../entities/Statement";
 import { InMemoryStatementsRepository } from "../../repositories/in-memory/InMemoryStatementsRepository"
+import { CreateStatementError } from "./CreateStatementError";
 import { CreateStatementUseCase } from "./CreateStatementUseCase";
 
 let inMemoryStatementsRepository: InMemoryStatementsRepository;
@@ -54,5 +55,16 @@ describe("Create Statement - Use Case", () => {
     });
 
     expect(withdraw).toHaveProperty("id");
+  });
+
+  it("should not be able to create statement when user non exists", async () => {
+    await expect(
+      createStatementUseCase.execute({
+        amount: 100,
+        description: "user non exists",
+        type: OperationType.DEPOSIT,
+        user_id: "id"
+      })
+    ).rejects.toBeInstanceOf(CreateStatementError.UserNotFound)
   });
 })
