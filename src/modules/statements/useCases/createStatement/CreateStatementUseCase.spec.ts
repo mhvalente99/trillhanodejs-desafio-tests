@@ -67,4 +67,21 @@ describe("Create Statement - Use Case", () => {
       })
     ).rejects.toBeInstanceOf(CreateStatementError.UserNotFound)
   });
+
+  it("should not be able to create statement withdraw when insufficient funds", async () => {
+    const user = await inMemoryUsersRepository.create({
+      email: "test-withdraw@test.com.br",
+      name: "Withdraw Teste",
+      password: "123"
+    });
+
+    await expect(
+      createStatementUseCase.execute({
+        amount: 100,
+        description: "insufficient funds",
+        type: OperationType.WITHDRAW,
+        user_id: user.id!
+      })
+    ).rejects.toBeInstanceOf(CreateStatementError.InsufficientFunds)
+  });
 })
