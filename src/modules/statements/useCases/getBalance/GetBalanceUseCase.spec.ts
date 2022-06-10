@@ -35,6 +35,6 @@ describe("Get Balance - Use Case", () => {
       getBalanceUseCase.execute({
         user_id: "id"
       })
-    ).rejects.toBeInstanceOf(GetBalanceError)
-  })
+    ).rejects.toBeInstanceOf(GetBalanceError);
+  });
 });
