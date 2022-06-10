@@ -13,4 +13,19 @@ describe("Get Balance - Use Case", () => {
 
     getBalanceUseCase = new GetBalanceUseCase(inMemoryStatementsRepository, inMemoryUsersRepository);
   });
+
+  it("should be able to get balance", async () => {
+    const user = await inMemoryUsersRepository.create({
+      email: "balance@test.com.br",
+      name: "Test Balance",
+      password: "123"
+    });
+
+    const balance = await getBalanceUseCase.execute({
+      user_id: user.id!
+    })
+
+    expect(balance).toHaveProperty("balance");
+    expect(balance).toHaveProperty("statement");
+  });
 });
